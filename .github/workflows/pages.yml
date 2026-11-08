@@ -37,6 +37,12 @@ jobs:
           cp index.html public/
           cp src/*.js src/*.css public/src/
           touch public/.nojekyll
+      - name: Verify static files
+        run: |
+          test -s public/index.html
+          test -s public/src/catalog.js
+          test -s public/src/app.js
+          test -s public/src/style.css
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
