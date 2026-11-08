@@ -1,0 +1,11 @@
+{
+  "name": "activationlab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "활성화 함수 인터랙티브 도감",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check src/catalog.js && node --check src/app.js"
+  }
+}
