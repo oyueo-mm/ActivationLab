@@ -16,3 +16,10 @@
 
 /* Audit fix: numerical coordinate readouts, proper axis units and no false clipping */
 .hero-axis-text{fill:#a3afbe;font-size:10px;font-family:inherit}.hero-current{display:block;margin:1px 0 0;color:#7b8797;font:11px ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}.hero-chart{flex-shrink:0}.hero-card{justify-content:space-between}.hero-card:focus-visible{outline:3px solid #a5c4fa;outline-offset:3px}@media(max-width:760px){.hero-current{font-size:9px}.hero-axis-text{font-size:9px}.hero-card{min-height:164px}}@media(max-width:380px){.hero-current{font-size:8px}.hero-card{min-height:147px}}
+
+
+/* Graph-first catalog: animated, viewport-aware mathematical previews */
+.function-card{gap:8px}.card-title-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}.card-title-row h3{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.card-kind{flex-shrink:0;font-size:10px;color:#8b98a8;white-space:nowrap}.mini-chart{overflow:hidden}.mini-ghost{opacity:.16}.mini-live{opacity:0}.mini-trace-dot{opacity:0;fill:#fff;stroke:var(--curve,#3578eb);stroke-width:2;pointer-events:none}.vector-track.is-negative{display:flex;justify-content:flex-end}.vector-track.is-negative .vector-bar{background:#9473e5}.mini-chart text{font-family:inherit;user-select:none}.catalog-grid .function-card:hover .mini-trace-dot{r:4.2}
+@media(max-width:760px){.card-kind{font-size:9px}.mini-chart{height:96px}.function-card{gap:5px}}
+@media(max-width:380px){.card-kind{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.mini-trace-dot{display:none}}

@@ -27,7 +27,7 @@ add("Sign",basic,"f(x) = sign(x)",x=>Math.sign(x),{desc:"입력의 부호를 −
 add("Sigmoid",basic,"f(x) = 1 / (1 + exp(−x))",x=>sigmoid(x),{desc:"출력 범위가 (0,1)인 로지스틱 함수입니다.",smooth:true,monotonic:true,alias:"Logistic"});
 add("Bipolar Sigmoid",basic,"f(x) = 2·sigmoid(x) − 1",x=>2*sigmoid(x)-1,{desc:"시그모이드를 (−1,1) 범위로 변형한 함수입니다.",smooth:true,monotonic:true});
 add("Tanh",basic,"f(x) = tanh(x)",x=>Math.tanh(x),{desc:"원점 대칭이며 출력 범위가 (−1,1)입니다.",smooth:true,monotonic:true,alias:"Hyperbolic Tangent"});
-add("Hard Sigmoid",basic,"f(x) = clamp((x + 3)/6, 0, 1)",x=>hs(x),{desc:"시그모이드를 선형 구간으로 근사한 형태입니다.",monotonic:true,alias:"Hardsigmoid"});
+add("Hard Sigmoid",basic,"f(x) = clamp((x + 3)/6, 0, 1)",x=>hs(x),{desc:"PyTorch Hardsigmoid 정의(x/6+1/2)를 사용합니다. 라이브러리에 따라 다른 Hard Sigmoid 정의도 있습니다.",monotonic:true,alias:"Hardsigmoid"});
 add("Hard Tanh",basic,"f(x) = clamp(x, −1, 1)",x=>Math.max(-1,Math.min(1,x)),{desc:"Tanh를 절단된 선형 함수로 근사합니다.",monotonic:true,alias:"Hardtanh"});
 add("Softsign",basic,"f(x) = x / (1 + |x|)",x=>x/(1+Math.abs(x)),{desc:"양끝에서 점진적으로 포화되는 유계 함수입니다.",smooth:true,monotonic:true});
 add("Arctan",basic,"f(x) = atan(x)",x=>Math.atan(x),{desc:"아크탄젠트 기반의 완만한 포화 함수입니다.",smooth:true,monotonic:true});
@@ -43,10 +43,10 @@ add("ReLU6",relu,"f(x) = min(max(0, x), 6)",x=>Math.min(6,Math.max(0,x)),{desc:"
 add("ReLU1",relu,"f(x) = clamp(x, −1, 1)",x=>Math.max(-1,Math.min(1,x)),{desc:"문헌과 프레임워크에서 ReLU1은 Hard Tanh와 동일하게 정의될 수 있습니다.",monotonic:true,alias:"Hard Tanh의 별칭"});
 add("Squared ReLU",relu,"f(x) = max(0, x)²",x=>Math.max(0,x)**2,{desc:"ReLU의 양수 출력을 제곱합니다.",monotonic:true,alias:"ReLU²"});
 add("Cubed ReLU",relu,"f(x) = max(0, x)³",x=>Math.max(0,x)**3,{desc:"양의 구간에서 세제곱 비선형성을 갖습니다.",smooth:true,monotonic:true,alias:"ReLU³"});
-add("Thresholded ReLU",relu,"f(x) = x (x > θ), 0 (그 외)",(x,p)=>x>p.theta?x:0,{desc:"설정한 임계값 이하의 출력을 제거합니다.",monotonic:true,params:[P("theta","θ",0,3,.25,1)],discontinuous:true});
+add("Thresholded ReLU",relu,"f(x) = x (x > θ), 0 (그 외)",(x,p)=>x>p.theta?x:0,{desc:"설정한 임계값 이하의 출력을 제거하며, θ>0에서는 x=θ에서 불연속입니다.",monotonic:true,params:[P("theta","θ",0,3,.25,1)],discontinuous:true});
 add("Shifted ReLU",relu,"f(x) = max(0, x − θ)",(x,p)=>Math.max(0,x-p.theta),{desc:"ReLU의 꺾이는 위치를 오른쪽으로 이동합니다.",monotonic:true,params:[P("theta","θ",-2,2,.25,1)]});
 add("Clipped ReLU",relu,"f(x) = clamp(x, 0, c)",(x,p)=>Math.max(0,Math.min(p.cap,x)),{desc:"양수 출력의 최대 크기를 제한합니다.",monotonic:true,params:[P("cap","상한 c",1,6,.5,3)]});
-add("ELU",relu,"f(x) = x (x≥0), α(exp(x)−1) (x<0)",(x,p)=>x>=0?x:p.alpha*Math.expm1(x),{desc:"음수 영역을 지수 곡선으로 연결합니다.",params:[P("alpha","α",.1,2,.1,1)],monotonic:true});
+add("ELU",relu,"f(x) = x (x≥0), α(exp(x)−1) (x<0)",(x,p)=>x>=0?x:p.alpha*Math.expm1(x),{desc:"음수 영역을 지수 곡선으로 연결합니다. α=1일 때 미분 가능합니다.",params:[P("alpha","α",.1,2,.1,1)],smooth:true,monotonic:true});
 add("CELU",relu,"f(x) = x (x≥0), α(exp(x/α)−1) (x<0)",(x,p)=>x>=0?x:p.alpha*Math.expm1(x/p.alpha),{desc:"ELU의 연속 미분 성질을 보강한 변형입니다(α>0).",smooth:true,monotonic:true,params:[P("alpha","α",.2,2,.1,1)]});
 add("SELU",relu,"f(x) = λ·[x (x≥0), α(exp(x)−1) (x<0)]",x=>1.0507009873554805*(x>=0?x:1.6732632423543772*Math.expm1(x)),{desc:"특정 초기화·네트워크 조건에서 자기 정규화 특성을 유도합니다.",monotonic:true});
 add("ISRLU",relu,"f(x) = x (x≥0), x/√(1+αx²) (x<0)",(x,p)=>x>=0?x:x/Math.sqrt(1+p.alpha*x*x),{desc:"역제곱근 기반의 ReLU 변형입니다.",smooth:true,monotonic:true,params:[P("alpha","α",.1,3,.1,1)]});
@@ -58,7 +58,7 @@ add("APL (1 hinge)",adaptive,"f(x) = max(0,x) + a·max(0,b−x)",(x,p)=>Math.max
 add("ACON-C",adaptive,"f(x) = (p₁−p₂)x·sigmoid(β(p₁−p₂)x)+p₂x",(x,p)=>(p.p1-p.p2)*x*sigmoid(p.beta*(p.p1-p.p2)*x)+p.p2*x,{desc:"학습 가능한 계수로 활성화 강도를 조절하는 형태입니다.",smooth:true,trainable:true,params:[P("p1","p₁",0,2,.1,1),P("p2","p₂",-1,1,.1,0),P("beta","β",.2,4,.2,1)]});
 add("Parametric Tanh",adaptive,"f(x) = a·tanh(bx)",(x,p)=>p.a*Math.tanh(p.b*x),{desc:"Tanh의 출력 크기와 기울기를 매개변수화한 형태입니다.",smooth:true,monotonic:true,params:[P("a","a",.2,2,.1,1),P("b","b",.2,3,.1,1)]});
 add("Scaled SiLU",adaptive,"f(x) = a·x·sigmoid(bx)",(x,p)=>p.a*x*sigmoid(p.b*x),{desc:"SiLU의 크기와 입력 기울기를 독립적으로 조절합니다.",smooth:true,monotonic:false,params:[P("a","a",.2,2,.1,1),P("b","b",.2,3,.1,1)]});
-add("GELU",smooth,"f(x) = x·Φ(x)",x=>gelu(x),{desc:"표준정규분포 누적분포함수 Φ를 곱한 평활 비선형 함수입니다.",smooth:true,monotonic:false,alias:"Gaussian Error Linear Unit"});
+add("GELU",smooth,"f(x) = x·Φ(x)",x=>gelu(x),{desc:"표준정규분포 누적분포함수 Φ로 정의됩니다. 브라우저 계산에서는 erf 수치 근사를 사용합니다.",smooth:true,monotonic:false,alias:"Gaussian Error Linear Unit"});
 add("GELU (tanh)",smooth,"f(x) ≈ x/2·[1+tanh(√(2/π)(x+0.044715x³))]",x=>geluApprox(x),{desc:"GELU에서 널리 쓰이는 tanh 근사입니다.",smooth:true,monotonic:false});
 add("QuickGELU",smooth,"f(x) = x·sigmoid(1.702x)",x=>x*sigmoid(1.702*x),{desc:"빠른 계산을 위한 GELU 근사형입니다.",smooth:true,monotonic:false});
 add("SiLU",smooth,"f(x) = x·sigmoid(x)",x=>x*sigmoid(x),{desc:"부드러운 비단조 함수로 Swish(β=1)와 동일합니다.",smooth:true,monotonic:false,alias:"Swish"});
@@ -71,12 +71,12 @@ add("LiSHT",smooth,"f(x) = x·tanh(x)",x=>x*Math.tanh(x),{desc:"양·음의 큰 
 add("dSiLU",smooth,"f(x) = sigmoid(x) + x·sigmoid(x)(1−sigmoid(x))",x=>{const s=sigmoid(x);return s+x*s*(1-s)},{desc:"SiLU의 1차 도함수를 활성화 함수로 사용하는 형태입니다.",smooth:true,monotonic:false});
 add("Logish",smooth,"f(x) = x·log(1+sigmoid(x))",x=>x*Math.log1p(sigmoid(x)),{desc:"로그와 시그모이드의 조합을 사용합니다.",smooth:true,monotonic:false});
 add("TanhExp",smooth,"f(x) = x·tanh(exp(x))",x=>x*Math.tanh(Math.exp(Math.min(x,50))),{desc:"양의 방향에서 선형에 가까워지는 평활 함수입니다.",smooth:true,monotonic:false});
-add("ELiSH",smooth,"f(x) = xσ(x) (x≥0), (exp(x)−1)σ(x) (x<0)",x=>x>=0?x*sigmoid(x):Math.expm1(x)*sigmoid(x),{desc:"ELU와 Sigmoid를 조합한 조각별 함수입니다.",smooth:false,monotonic:false});
+add("ELiSH",smooth,"f(x) = xσ(x) (x≥0), (exp(x)−1)σ(x) (x<0)",x=>x>=0?x*sigmoid(x):Math.expm1(x)*sigmoid(x),{desc:"ELU와 Sigmoid를 조합한 조각별 함수입니다. 0에서 1차 도함수가 연속입니다.",smooth:true,monotonic:false});
 add("Hard ELiSH",smooth,"f(x) = x·hard_sigmoid(x) (x≥0), (exp(x)−1)·hard_sigmoid(x) (x<0)",x=>x>=0?x*hs(x):Math.expm1(x)*hs(x),{desc:"ELiSH의 게이트를 Hard Sigmoid로 대체한 변형입니다.",monotonic:false});
 add("Exponential",smooth,"f(x) = exp(x)",x=>Math.exp(x),{desc:"입력을 양수 영역에 사상하는 지수 함수입니다.",smooth:true,monotonic:true});
 add("Sine",periodic,"f(x) = sin(x)",x=>Math.sin(x),{desc:"주기성을 갖는 연속 함수입니다.",smooth:true,monotonic:false,alias:"Sin"});
 add("Cosine",periodic,"f(x) = cos(x)",x=>Math.cos(x),{desc:"사인 함수에서 위상을 이동한 주기 함수입니다.",smooth:true,monotonic:false,alias:"Cos"});
-add("Sinc",periodic,"f(x) = sin(x)/x, f(0)=1",x=>Math.abs(x)<1e-9?1:Math.sin(x)/x,{desc:"0에서의 제거 가능한 특이점을 연속적으로 연장합니다.",smooth:true,monotonic:false});
+add("Sinc",periodic,"f(x) = sin(x)/x, f(0)=1",x=>Math.abs(x)<1e-9?1:Math.sin(x)/x,{desc:"정의는 sin(x)/x(비정규화 Sinc)이며, x=0에서는 극한값 1로 연장합니다.",smooth:true,monotonic:false});
 add("Snake",periodic,"f(x) = x + sin²(αx)/α",(x,p)=>x+Math.sin(p.alpha*x)**2/p.alpha,{desc:"주기적 성분을 선형 추세 위에 결합한 함수입니다. 도함수는 1+sin(2αx)로 항상 음수가 아닙니다.",smooth:true,monotonic:true,params:[P("alpha","α",.2,4,.2,1)]});
 add("SnakeBeta",periodic,"f(x) = x + sin²(αx)/β",(x,p)=>x+Math.sin(p.alpha*x)**2/p.beta,{desc:"주기 성분의 주파수 α와 진폭 β를 독립적으로 조절합니다. α/β에 따라 단조성이 달라집니다.",smooth:true,monotonic:null,params:[P("alpha","α",.2,4,.2,1),P("beta","β",.2,4,.2,1)]});
 add("Gaussian",periodic,"f(x) = exp(−x²)",x=>Math.exp(-x*x),{desc:"0을 중심으로 하는 종 모양의 방사 기저형 함수입니다.",smooth:true,monotonic:false,alias:"Gaussian RBF"});
@@ -85,7 +85,7 @@ add("Morlet-like",periodic,"f(x) = cos(5x)·exp(−x²/2)",x=>Math.cos(5*x)*Math
 add("Sin²",periodic,"f(x) = sin²(x)",x=>Math.sin(x)**2,{desc:"음수 출력이 없고 π 주기를 갖는 함수입니다.",smooth:true,monotonic:false});
 add("Cos²",periodic,"f(x) = cos²(x)",x=>Math.cos(x)**2,{desc:"0과 1 사이에서 진동합니다.",smooth:true,monotonic:false});
 add("Hardshrink",shrink,"f(x) = x (|x|>λ), 0 (그 외)",(x,p)=>Math.abs(x)>p.lambda?x:0,{desc:"작은 절대값의 입력을 0으로 제거합니다.",discontinuous:true,params:[P("lambda","λ",.1,2,.1,.5)],monotonic:true});
-add("Softshrink",shrink,"f(x) = x−λ (x>λ), x+λ (x<−λ), 0 (그 외)",(x,p)=>x>p.lambda?x-p.lambda:x< -p.lambda?x+p.lambda:0,{desc:"임계값 이내는 0으로 만들고 외부는 부드럽게 이동합니다.",monotonic:true,params:[P("lambda","λ",.1,2,.1,.5)]});
+add("Softshrink",shrink,"f(x) = x−λ (x>λ), x+λ (x<−λ), 0 (그 외)",(x,p)=>x>p.lambda?x-p.lambda:x< -p.lambda?x+p.lambda:0,{desc:"임계값 이내는 0으로 만들고 바깥 구간은 선형 이동합니다. 경계 ±λ에서는 미분되지 않습니다.",monotonic:true,params:[P("lambda","λ",.1,2,.1,.5)]});
 add("Tanhshrink",shrink,"f(x) = x − tanh(x)",x=>x-Math.tanh(x),{desc:"입력에서 Tanh 출력을 뺀 함수입니다.",smooth:true,monotonic:true});
 add("Softclip",shrink,"f(x) = softplus(x) − softplus(x−c)",(x,p)=>softplus(x)-softplus(x-p.c),{desc:"매끄럽게 0과 상한 c 사이로 포화되는 함수입니다.",smooth:true,monotonic:true,params:[P("c","상한 c",1,6,.5,3)]});
 add("Triangle",shrink,"f(x) = max(0,1−|x|)",x=>Math.max(0,1-Math.abs(x)),{desc:"중심에서 가장 크고 양쪽에서 0이 되는 삼각 함수형 활성화입니다.",monotonic:false});
@@ -106,5 +106,6 @@ special("Bilinear GLU","gated","f(a,b) = a·b","gated","비선형 게이트 없�
 for(const a of activations.filter(a=>a.kind==="gated")){a.params=[P("gate","게이트 입력 b",-4,4,.2,1)];a.monotonic=null;}
 export function defaults(a){return Object.fromEntries(a.params.map(p=>[p.key,p.value]));}
 export function evaluate(a,x,params=defaults(a)){if(!a.fn)return NaN;const n=a.fn(x,params);return Number.isFinite(n)?n:NaN;}
-export function derivative(a,x,params=defaults(a)){if(!a.fn)return NaN;const h=1e-4*Math.max(1,Math.abs(x)),left=evaluate(a,x-h,params),center=evaluate(a,x,params),right=evaluate(a,x+h,params);if(![left,center,right].every(Number.isFinite))return NaN;if(a.discontinuous&&Math.abs(right-left)>.02)return NaN;const ls=(center-left)/h,rs=(right-center)/h;if(!a.smooth&&Math.abs(ls-rs)>.025*(1+Math.max(Math.abs(ls),Math.abs(rs))))return NaN;const value=(right-left)/(2*h);return Number.isFinite(value)?value:NaN;}
+export function isDifferentiable(a,p=defaults(a)){if(a.kind!=="scalar")return null;if(a.name==="ELU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="Leaky ReLU"||a.name==="PReLU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="SReLU")return Math.abs(p.al-1)<1e-9&&Math.abs(p.ar-1)<1e-9;return Boolean(a.smooth);}
+export function derivative(a,x,params=defaults(a)){if(!a.fn)return NaN;const h=1e-4*Math.max(1,Math.abs(x)),left=evaluate(a,x-h,params),center=evaluate(a,x,params),right=evaluate(a,x+h,params);if(![left,center,right].every(Number.isFinite))return NaN;if(a.discontinuous&&Math.abs(right-left)>.02)return NaN;const ls=(center-left)/h,rs=(right-center)/h;if(!isDifferentiable(a,params)&&Math.abs(ls-rs)>.025*(1+Math.max(Math.abs(ls),Math.abs(rs))))return NaN;const value=(right-left)/(2*h);return Number.isFinite(value)?value:NaN;}
 export function computeVector(kind,values){if(kind==="Softmax"||kind==="Softmin"||kind==="LogSoftmax"){const z=kind==="Softmin"?values.map(v=>-v):values;const m=Math.max(...z);const s=z.map(v=>Math.exp(v-m));const logsum=Math.log(s.reduce((a,b)=>a+b,0));return kind==="LogSoftmax"?z.map(v=>v-m-logsum):s.map(v=>v/s.reduce((a,b)=>a+b,0));}if(kind==="Sparsemax"){const sorted=[...values].sort((a,b)=>b-a);let sum=0,k=0,tau=0;sorted.forEach((z,i)=>{sum+=z;if(1+(i+1)*z>sum){k=i+1;tau=(sum-1)/k;}});return values.map(v=>Math.max(0,v-tau));}if(kind==="Entmax 1.5"){const z=values.map(v=>v/2),hi=Math.max(...z),lo=Math.min(...z)-2;let left=lo,right=hi;for(let i=0;i<70;i++){const mid=(left+right)/2;const s=z.reduce((t,v)=>t+Math.max(0,v-mid)**2,0);if(s>1)left=mid;else right=mid;}const tau=(left+right)/2;return z.map(v=>Math.max(0,v-tau)**2);}return values;}
