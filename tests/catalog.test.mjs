@@ -1,0 +1,13 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {activations,defaults,evaluate,derivative,computeVector} from "../src/catalog.js";
+const find=name=>activations.find(a=>a.name===name);
+const eq=(a,b,tolerance=1e-6)=>assert.ok(Math.abs(a-b)<=tolerance,`${a} != ${b}`);
+test("카탈로그에 80개 이상의 항목이 있고 ID는 고유하다",()=>{assert.ok(activations.length>=80);assert.equal(new Set(activations.map(a=>a.id)).size,activations.length);});
+test("각 함수의 정의와 기본 매개변수가 유효하다",()=>{for(const a of activations){assert.ok(a.name&&a.formula&&a.desc);if(a.kind==="vector")continue;for(let j=0;j<=120;j++){const x=-6+j*.1;assert.ok(Number.isFinite(evaluate(a,x,defaults(a))),a.name+" @ "+x);}}});
+test("대표적인 함수의 기준값",()=>{eq(evaluate(find("Sigmoid"),0),.5);eq(evaluate(find("Tanh"),0),0);eq(evaluate(find("ReLU"),-4),0);eq(evaluate(find("ReLU"),4),4);eq(evaluate(find("SiLU"),0),0);eq(evaluate(find("GELU"),1),.841344746,2e-6);eq(evaluate(find("Softplus"),0),Math.log(2));});
+test("수식 별칭들의 출력이 동일하다",()=>{for(let x=-6;x<=6;x+=.5){eq(evaluate(find("Softsign"),x),evaluate(find("Elliott"),x));eq(evaluate(find("Hard Tanh"),x),evaluate(find("ReLU1"),x));eq(evaluate(find("Softshrink"),x),evaluate(find("Soft Threshold"),x));eq(evaluate(find("SiLU"),x),evaluate(find("Swish β"),x));}});
+test("벡터 확률 함수 출력의 합이 1이다",()=>{for(const input of [[1,2,3,4],[0,0,0,0],[-4,-2,1,5],[3,3,-3,-3]]){for(const name of ["Softmax","Softmin","Sparsemax","Entmax 1.5"]){const values=computeVector(name,input);eq(values.reduce((s,x)=>s+x,0),1,2e-9);assert.ok(values.every(x=>x>=-1e-9&&x<=1+1e-9));}const log=computeVector("LogSoftmax",input);eq(log.reduce((s,x)=>s+Math.exp(x),0),1,1e-9);}});
+test("Softmax는 입력에 같은 상수를 더해도 변하지 않는다",()=>{const a=computeVector("Softmax",[1,2,3,4]),b=computeVector("Softmax",[101,102,103,104]);a.forEach((x,i)=>eq(x,b[i]));});
+test("불연속 함수의 도함수는 그래프에 표시되지 않는다",()=>{for(const name of ["Binary Step","Bipolar Step","Sign","Hardshrink","Thresholded ReLU"]){assert.ok(Number.isNaN(derivative(find(name),0)));}});
+test("게이트 함수의 출력이 계산 가능하다",()=>{for(const name of ["GLU","ReGLU","GEGLU","SwiGLU","Bilinear GLU"]){const a=find(name);assert.equal(a.kind,"gated");assert.ok(Number.isFinite(evaluate(a,1.5,defaults(a))));}});
