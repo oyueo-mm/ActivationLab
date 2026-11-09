@@ -26,3 +26,6 @@
 
 /* v1.2: concise explanation visible immediately in activation detail */
 .drawer-heading .detail-lead{display:block;margin:10px 0 0;color:#667487;font-size:13px;line-height:1.75;letter-spacing:-.1px;word-break:keep-all;overflow-wrap:anywhere}.detail-variant{display:inline-flex;align-items:center;margin-top:10px;color:#5d7fae;background:#eef4ff;border-radius:6px;font-size:10px;padding:4px 8px;font-weight:620}.drawer-heading{margin-bottom:19px}.details-summary .detail-section-label{margin-top:13px}@media(max-width:760px){.drawer-heading .detail-lead{font-size:12px;line-height:1.65}}
+
+/* Background-free A-curve brand mark; the same vector is used for the favicon. */
+.brand-mark{background:transparent;border-radius:0;width:39px;height:39px}.brand-mark img{display:block;width:100%;height:100%;object-fit:contain}
