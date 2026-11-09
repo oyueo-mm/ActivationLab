@@ -2,15 +2,15 @@ import {appendAdvanced,advancedVector} from "./advanced-activations.js";
 import {appendMore} from "./more-activations.js";
 // ActivationLab v1.0 — 검증 가능한 스칼라·벡터·게이트 함수 카탈로그
 export const families = [
-  {id:"basic",label:"기본·고전",color:"#64748b"},
-  {id:"relu",label:"ReLU·지수",color:"#3b82f6"},
-  {id:"smooth",label:"평활·현대",color:"#8b5cf6"},
-  {id:"periodic",label:"주기·특수",color:"#e59c30"},
-  {id:"radial",label:"방사기저·커널",color:"#168a9b"},
-  {id:"shrink",label:"수축·희소",color:"#14a88b"},
-  {id:"adaptive",label:"학습·적응",color:"#e46b91"},
-  {id:"vector",label:"벡터·확률",color:"#0ca6bc"},
-  {id:"gated",label:"게이트",color:"#af74e4"}
+  {id:"basic",label:"기본·고전",color:"#4A4A4A"},
+  {id:"relu",label:"ReLU·지수",color:"#6D8196"},
+  {id:"smooth",label:"평활·현대",color:"#CBCBCB"},
+  {id:"periodic",label:"주기·특수",color:"#4A4A4A"},
+  {id:"radial",label:"방사기저·커널",color:"#6D8196"},
+  {id:"shrink",label:"수축·희소",color:"#CBCBCB"},
+  {id:"adaptive",label:"학습·적응",color:"#4A4A4A"},
+  {id:"vector",label:"벡터·확률",color:"#6D8196"},
+  {id:"gated",label:"게이트",color:"#CBCBCB"}
 ];
 export const sigmoid=x=>x>=0?1/(1+Math.exp(-x)):Math.exp(x)/(1+Math.exp(x));
 export const softplus=x=>x>35?x:x< -35?Math.exp(x):Math.log1p(Math.exp(x));
