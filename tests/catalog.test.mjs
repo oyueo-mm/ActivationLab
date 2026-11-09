@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {activations,defaults,evaluate,derivative,computeVector} from "../src/catalog.js";
 const find=name=>activations.find(a=>a.name===name);
 const eq=(a,b,tolerance=1e-6)=>assert.ok(Math.abs(a-b)<=tolerance,`${a} != ${b}`);
-test("카탈로그에 80개 이상의 항목이 있고 ID는 고유하다",()=>{assert.ok(activations.length>=80);assert.equal(new Set(activations.map(a=>a.id)).size,activations.length);});
+test("카탈로그에 116개 이상의 항목이 있고 ID는 고유하다",()=>{assert.ok(activations.length>=116);assert.equal(new Set(activations.map(a=>a.id)).size,activations.length);});
 test("각 함수의 정의와 기본 매개변수가 유효하다",()=>{for(const a of activations){assert.ok(a.name&&a.formula&&a.desc);if(a.kind==="vector")continue;for(let j=0;j<=120;j++){const x=-6+j*.1;assert.ok(Number.isFinite(evaluate(a,x,defaults(a))),a.name+" @ "+x);}}});
 test("대표적인 함수의 기준값",()=>{eq(evaluate(find("Sigmoid"),0),.5);eq(evaluate(find("Tanh"),0),0);eq(evaluate(find("ReLU"),-4),0);eq(evaluate(find("ReLU"),4),4);eq(evaluate(find("SiLU"),0),0);eq(evaluate(find("GELU"),1),.841344746,2e-6);eq(evaluate(find("Softplus"),0),Math.log(2));});
 test("수식 별칭들의 출력이 동일하다",()=>{for(let x=-6;x<=6;x+=.5){eq(evaluate(find("Softsign"),x),evaluate(find("Elliott"),x));eq(evaluate(find("Hard Tanh"),x),evaluate(find("ReLU1"),x));eq(evaluate(find("Softshrink"),x),evaluate(find("Soft Threshold"),x));eq(evaluate(find("SiLU"),x),evaluate(find("Swish β"),x));}});

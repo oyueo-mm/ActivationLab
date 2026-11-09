@@ -1,9 +1,11 @@
+import {appendMore} from "./more-activations.js";
 // ActivationLab v1.0 — 검증 가능한 스칼라·벡터·게이트 함수 카탈로그
 export const families = [
   {id:"basic",label:"기본·고전",color:"#64748b"},
   {id:"relu",label:"ReLU·지수",color:"#3b82f6"},
   {id:"smooth",label:"평활·현대",color:"#8b5cf6"},
   {id:"periodic",label:"주기·특수",color:"#e59c30"},
+  {id:"radial",label:"방사기저·커널",color:"#168a9b"},
   {id:"shrink",label:"수축·희소",color:"#14a88b"},
   {id:"adaptive",label:"학습·적응",color:"#e46b91"},
   {id:"vector",label:"벡터·확률",color:"#0ca6bc"},
@@ -79,9 +81,9 @@ add("Cosine",periodic,"f(x) = cos(x)",x=>Math.cos(x),{desc:"사인 함수에서 
 add("Sinc",periodic,"f(x) = sin(x)/x, f(0)=1",x=>Math.abs(x)<1e-9?1:Math.sin(x)/x,{desc:"정의는 sin(x)/x(비정규화 Sinc)이며, x=0에서는 극한값 1로 연장합니다.",smooth:true,monotonic:false});
 add("Snake",periodic,"f(x) = x + sin²(αx)/α",(x,p)=>x+Math.sin(p.alpha*x)**2/p.alpha,{desc:"주기적 성분을 선형 추세 위에 결합한 함수입니다. 도함수는 1+sin(2αx)로 항상 음수가 아닙니다.",smooth:true,monotonic:true,params:[P("alpha","α",.2,4,.2,1)]});
 add("SnakeBeta",periodic,"f(x) = x + sin²(αx)/β",(x,p)=>x+Math.sin(p.alpha*x)**2/p.beta,{desc:"주기 성분의 주파수 α와 진폭 β를 독립적으로 조절합니다. α/β에 따라 단조성이 달라집니다.",smooth:true,monotonic:null,params:[P("alpha","α",.2,4,.2,1),P("beta","β",.2,4,.2,1)]});
-add("Gaussian",periodic,"f(x) = exp(−x²)",x=>Math.exp(-x*x),{desc:"0을 중심으로 하는 종 모양의 방사 기저형 함수입니다.",smooth:true,monotonic:false,alias:"Gaussian RBF"});
+add("Gaussian","radial","f(x) = exp(−x²)",x=>Math.exp(-x*x),{desc:"0을 중심으로 하는 종 모양의 방사 기저형 함수입니다.",smooth:true,monotonic:false,alias:"Gaussian RBF"});
 add("GCU",periodic,"f(x) = x·cos(x)",x=>x*Math.cos(x),{desc:"진동하는 주기 성분과 입력값의 곱입니다.",smooth:true,monotonic:false,alias:"Growing Cosine Unit"});
-add("Morlet-like",periodic,"f(x) = cos(5x)·exp(−x²/2)",x=>Math.cos(5*x)*Math.exp(-x*x/2),{desc:"정규화·평균 보정을 생략한 Morlet 형태의 예시입니다.",smooth:true,monotonic:false});
+add("Morlet-like","radial","f(x) = cos(5x)·exp(−x²/2)",x=>Math.cos(5*x)*Math.exp(-x*x/2),{desc:"정규화·평균 보정을 생략한 Morlet 형태의 예시입니다.",smooth:true,monotonic:false});
 add("Sin²",periodic,"f(x) = sin²(x)",x=>Math.sin(x)**2,{desc:"음수 출력이 없고 π 주기를 갖는 함수입니다.",smooth:true,monotonic:false});
 add("Cos²",periodic,"f(x) = cos²(x)",x=>Math.cos(x)**2,{desc:"0과 1 사이에서 진동합니다.",smooth:true,monotonic:false});
 add("Hardshrink",shrink,"f(x) = x (|x|>λ), 0 (그 외)",(x,p)=>Math.abs(x)>p.lambda?x:0,{desc:"작은 절대값의 입력을 0으로 제거합니다.",discontinuous:true,params:[P("lambda","λ",.1,2,.1,.5)],monotonic:true});
@@ -104,8 +106,9 @@ special("GEGLU","gated","f(a,b) = a·GELU(b)","gated","GELU 기반 게이팅을 
 special("SwiGLU","gated","f(a,b) = a·SiLU(b)","gated","SiLU로 게이트를 조절하는 Transformer 관련 변형입니다.",(x,p)=>x*p.gate*sigmoid(p.gate));
 special("Bilinear GLU","gated","f(a,b) = a·b","gated","비선형 게이트 없이 두 입력의 곱을 사용합니다.",(x,p)=>x*p.gate);
 for(const a of activations.filter(a=>a.kind==="gated")){a.params=[P("gate","게이트 입력 b",-4,4,.2,1)];a.monotonic=null;}
+appendMore({add,P,sigmoid,softplus,hs,special});
 export function defaults(a){return Object.fromEntries(a.params.map(p=>[p.key,p.value]));}
 export function evaluate(a,x,params=defaults(a)){if(!a.fn)return NaN;const n=a.fn(x,params);return Number.isFinite(n)?n:NaN;}
-export function isDifferentiable(a,p=defaults(a)){if(a.kind!=="scalar")return null;if(a.name==="ELU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="Leaky ReLU"||a.name==="PReLU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="SReLU")return Math.abs(p.al-1)<1e-9&&Math.abs(p.ar-1)<1e-9;return Boolean(a.smooth);}
+export function isDifferentiable(a,p=defaults(a)){if(a.kind!=="scalar")return null;if(a.name==="ELU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="MPELU")return Math.abs(p.alpha*p.beta-1)<1e-9;if(a.name==="Leaky ReLU"||a.name==="PReLU")return Math.abs(p.alpha-1)<1e-9;if(a.name==="SReLU")return Math.abs(p.al-1)<1e-9&&Math.abs(p.ar-1)<1e-9;return Boolean(a.smooth);}
 export function derivative(a,x,params=defaults(a)){if(!a.fn)return NaN;const h=1e-4*Math.max(1,Math.abs(x)),left=evaluate(a,x-h,params),center=evaluate(a,x,params),right=evaluate(a,x+h,params);if(![left,center,right].every(Number.isFinite))return NaN;if(a.discontinuous&&Math.abs(right-left)>.02)return NaN;const ls=(center-left)/h,rs=(right-center)/h;if(!isDifferentiable(a,params)&&Math.abs(ls-rs)>.025*(1+Math.max(Math.abs(ls),Math.abs(rs))))return NaN;const value=(right-left)/(2*h);return Number.isFinite(value)?value:NaN;}
-export function computeVector(kind,values){if(kind==="Softmax"||kind==="Softmin"||kind==="LogSoftmax"){const z=kind==="Softmin"?values.map(v=>-v):values;const m=Math.max(...z);const s=z.map(v=>Math.exp(v-m));const logsum=Math.log(s.reduce((a,b)=>a+b,0));return kind==="LogSoftmax"?z.map(v=>v-m-logsum):s.map(v=>v/s.reduce((a,b)=>a+b,0));}if(kind==="Sparsemax"){const sorted=[...values].sort((a,b)=>b-a);let sum=0,k=0,tau=0;sorted.forEach((z,i)=>{sum+=z;if(1+(i+1)*z>sum){k=i+1;tau=(sum-1)/k;}});return values.map(v=>Math.max(0,v-tau));}if(kind==="Entmax 1.5"){const z=values.map(v=>v/2),hi=Math.max(...z),lo=Math.min(...z)-2;let left=lo,right=hi;for(let i=0;i<70;i++){const mid=(left+right)/2;const s=z.reduce((t,v)=>t+Math.max(0,v-mid)**2,0);if(s>1)left=mid;else right=mid;}const tau=(left+right)/2;return z.map(v=>Math.max(0,v-tau)**2);}return values;}
+export function computeVector(kind,values){if(kind==="Softmax"||kind==="Softmin"||kind==="LogSoftmax"){const z=kind==="Softmin"?values.map(v=>-v):values;const m=Math.max(...z);const s=z.map(v=>Math.exp(v-m));const logsum=Math.log(s.reduce((a,b)=>a+b,0));return kind==="LogSoftmax"?z.map(v=>v-m-logsum):s.map(v=>v/s.reduce((a,b)=>a+b,0));}if(kind==="Hardmax"){const winner=values.indexOf(Math.max(...values));return values.map((_,i)=>i===winner?1:0);}if(kind==="Squared ReLU Normalize"){const weights=values.map(v=>Math.max(0,v)**2),total=weights.reduce((a,b)=>a+b,0);return total>0?weights.map(v=>v/total):values.map(()=>1/values.length);}if(kind==="Sparsemax"){const sorted=[...values].sort((a,b)=>b-a);let sum=0,k=0,tau=0;sorted.forEach((z,i)=>{sum+=z;if(1+(i+1)*z>sum){k=i+1;tau=(sum-1)/k;}});return values.map(v=>Math.max(0,v-tau));}if(kind==="Entmax 1.5"){const z=values.map(v=>v/2),hi=Math.max(...z),lo=Math.min(...z)-2;let left=lo,right=hi;for(let i=0;i<70;i++){const mid=(left+right)/2;const s=z.reduce((t,v)=>t+Math.max(0,v-mid)**2,0);if(s>1)left=mid;else right=mid;}const tau=(left+right)/2;return z.map(v=>Math.max(0,v-tau)**2);}return values;}

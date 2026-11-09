@@ -23,3 +23,6 @@
 @media(max-width:760px){.card-kind{font-size:9px}.mini-chart{height:96px}.function-card{gap:5px}}
 @media(max-width:380px){.card-kind{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.mini-trace-dot{display:none}}
+
+/* v1.2: concise explanation visible immediately in activation detail */
+.drawer-heading .detail-lead{display:block;margin:10px 0 0;color:#667487;font-size:13px;line-height:1.75;letter-spacing:-.1px;word-break:keep-all;overflow-wrap:anywhere}.detail-variant{display:inline-flex;align-items:center;margin-top:10px;color:#5d7fae;background:#eef4ff;border-radius:6px;font-size:10px;padding:4px 8px;font-weight:620}.drawer-heading{margin-bottom:19px}.details-summary .detail-section-label{margin-top:13px}@media(max-width:760px){.drawer-heading .detail-lead{font-size:12px;line-height:1.65}}
