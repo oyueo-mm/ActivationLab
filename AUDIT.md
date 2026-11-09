@@ -1,7 +1,7 @@
-# ActivationLab — 116개 도감 정확성 점검 기록
+# ActivationLab — 132개 도감 정확성 점검 기록
 
 ## 점검 대상
-- 총 **116개 항목**: 스칼라 98개, 게이트 11개, 벡터 7개.
+- 총 **132개 항목**: 스칼라 108개, 게이트 11개, 벡터 12개, 공간형 1개.
 - 기본·고전, ReLU·지수, 평활·현대, 주기·특수, 방사기저·커널, 수축·희소, 학습·적응, 벡터·확률, 게이트의 9개 계열.
 - 도감 항목에는 동일 수식의 별칭(Elliott/Softsign, ReLU1/Hard Tanh, Soft Threshold/Softshrink), 매개변수형, 계산 근사형, 연구 예시가 포함된다.
 
@@ -15,7 +15,7 @@
 
 ## 수치·형태 검증
 - 77개 스칼라·게이트 함수 기본 매개변수에서, 각 **x∈[−4,4]의 1,001개 표본**이 미리보기 세로축에 들어오는지 확인(총 77,077개 좌표).
-- 116개 항목의 필수 필드·유형·매개변수 범위 확인. 스칼라·게이트 함수는 기본값 및 매개변수 끝값에서 비유한 출력이 없는지 검사.
+- 132개 항목의 필수 필드·유형·매개변수 범위 확인. 스칼라·게이트 함수는 기본값 및 매개변수 끝값에서 비유한 출력이 없는지 검사.
 - 독립적인 기준 수식과 경계값으로 Sigmoid, Tanh, SiLU, ReLU, Leaky ReLU, Softsign, Softplus, Hard Sigmoid, GELU 등 주요 함수 대조.
 - 홀짝 대칭, 출력 범위, 실제 도함수(표본과 기준값), 단조성, 불연속 함수의 점프 개수와 열린 점·닫힌 점 개수를 확인.
 - Softmax·Softmin·Sparsemax·Entmax 1.5의 비음수 출력·합 1, LogSoftmax의 exp(output) 합 1 및 큰 입력에서의 안정성을 검증.
@@ -46,3 +46,19 @@
 - 원저자 코드와 모든 수치값을 일대일 재현하지는 않았으며 함수 정의와 샘플별 수치 검증으로 범위를 제한함.
 
 출처: [PyTorch 활성화 함수](https://docs.pytorch.org/docs/main/nn.html), [Maxout Networks](https://proceedings.mlr.press/v28/goodfellow13.pdf), [400개 활성화 함수 조사](https://arxiv.org/abs/2402.09092), [Hard Mish](https://github.com/digantamisra98/H-Mish).
+
+## 16개 기능 확장 — v1.3.0
+
+- 새로운 항목 117~132. 수학적 정의는 논문/공식 구현과 대조하고 기존 001~116의 ID·목록을 보존합니다.
+- **SPOCU**는 c=1인 다항식 기반의 C¹ 연속형, **PAU**는 2차 축약형(분모 절댓값을 통한 실수축 극점 방지)으로 명시합니다. SERF는 내장 erf 수치 근사를 사용합니다.
+- **α-Entmax**는 α=1 softmax, α=1.5 기존 Entmax 1.5, α=2 Sparsemax와 수치적으로 비교. **Top-k Softmax**는 동점에서 앞쪽 원소 우선. **Gumbel-Softmax**는 시드 고정 독립 잡음과 온도 조절을 제공합니다.
+- **GroupSort/MaxMin**은 확률분포가 아닌 순열 기반 벡터이며, 합계가 1일 필요가 없습니다.
+- **KAN**은 1개 간선의 SiLU+6개 2차 B-spline 기저·계수 시연입니다. **FReLU**는 학습된 depthwise conv+BN 대신 7×7 고정 예제의 3×3 국소 평균 문맥입니다. **DY-ReLU**는 문맥으로 2개의 선형 가지 계수를 고정 공식으로 변경하는 시연입니다. 세 시연은 모델 학습 결과나 논문 원본 전체 구현이 아닙니다.
+- 함수식·매개변수·불연속점·도감 미리보기·분류·계산 결과를 검증하며 새로운 함수 모두에서 실제 모델 성능 향상을 보장하지 않습니다.
+
+### 주요 근거
+- [GoLU, NeurIPS 2025](https://proceedings.neurips.cc/paper_files/paper/2025/hash/5c27081642b61e1bf1ab91babf45cf9b-Abstract-Conference.html)
+- [Smish](https://www.mdpi.com/2079-9292/11/4/540), [SERF](https://openaccess.thecvf.com/content/WACV2023/papers/Nag_SERF_Towards_Better_Training_of_Deep_Neural_Networks_Using_Log-Softplus_WACV_2023_paper.pdf)
+- [SPOCU](https://link.springer.com/article/10.1007/s00521-020-05182-1), [PAU](https://openreview.net/pdf?id=BJlBSkHtDS)
+- [GroupSort](https://proceedings.mlr.press/v97/anil19a/anil19a.pdf), [Entmax](https://github.com/deep-spin/entmax), [Gumbel-Softmax](https://docs.pytorch.org/docs/main/generated/torch.nn.functional.gumbel_softmax.html)
+- [KAN](https://arxiv.org/abs/2404.19756), [FReLU](https://www.ecva.net/papers/eccv_2020/papers_ECCV/html/1342_ECCV_2020_paper.php), [DY-ReLU](https://www.ecva.net/papers/eccv_2020/papers_ECCV/html/3223_ECCV_2020_paper.php)
