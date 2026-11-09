@@ -61,7 +61,3 @@ python3 -m http.server 8000
 - [Gaussian Error Linear Units (arXiv)](https://arxiv.org/abs/1606.08415)
 
 MIT License
-
-## Ink wash 색상 테마
-
-사용자가 지정한 네 가지 색상 `#4A4A4A`(차콜), `#CBCBCB`(쿨그레이), `#FFFFE3`(아이보리), `#6D8196`(블루그레이)을 홈·도감·상세·비교·그래프·로고·파비콘에 적용합니다. 주요 글자와 버튼은 차콜·아이보리의 높은 대비를 활용하고, 선택 상태와 그래프에는 블루그레이를 사용합니다.

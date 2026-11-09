@@ -1,7 +1,7 @@
 import {activations,defaults,evaluate} from "./catalog.js";
 export const heroNames=["ReLU","Sigmoid","Tanh","SiLU"];
 export const heroDomains={ReLU:{ymin:-0.6,ymax:4.6},Sigmoid:{ymin:-0.12,ymax:1.12},Tanh:{ymin:-1.2,ymax:1.2},SiLU:{ymin:-0.7,ymax:4.5}};
-const heroColors=["#4A4A4A","#6D8196","#4A4A4A","#6D8196"];
+const heroColors=["#3578eb","#9272dd","#19a58b","#e2a03a"];
 const plot={left:17,right:290,top:16,bottom:168};let slots=[],frame=0,origin=0;
 export function heroProgress(ms,index){const phase=((ms/9000+index*.32)%2+2)%2;const t=phase<=1?phase:2-phase;return (1-Math.cos(Math.PI*t))/2;}
 export function heroPoint(a,progress,p=defaults(a)){const x=-4+8*progress,y=evaluate(a,x,p),domain=heroDomains[a.name];if(!domain||!Number.isFinite(y))return {x,y,px:NaN,py:NaN};return {x,y,px:plot.left+(plot.right-plot.left)*progress,py:plot.top+(domain.ymax-y)*(plot.bottom-plot.top)/(domain.ymax-domain.ymin)};}
