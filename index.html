@@ -12,14 +12,14 @@
 <body>
 <div id="app" class="app">
   <aside class="sidebar" id="sidebar" aria-label="함수 분류">
-    <a class="brand" href="#/home" aria-label="ActivationLab 홈"><span class="brand-mark"><img src="./assets/activationlab-mark.svg" width="39" height="39" alt="" aria-hidden="true"></span><span class="brand-label">Activation<span>Lab</span></span></a><button type="button" class="sidebar-collapse-button" id="sidebar-collapse" aria-label="사이드바 접기" aria-expanded="true" title="사이드바 접기">‹</button>
+    <div class="brand-area"><a class="brand-home" href="#/home" aria-label="ActivationLab 홈"><span class="brand-label">Activation<span>Lab</span></span></a><button type="button" class="brand-reopen" id="brand-reopen" aria-label="사이드바 펼치기" aria-expanded="false" title="사이드바 펼치기"><span class="brand-mark"><img src="./assets/activationlab-mark.svg" width="28" height="28" alt="" aria-hidden="true"></span></button><button type="button" class="sidebar-collapse-button" id="sidebar-collapse" aria-label="사이드바 접기" aria-expanded="true" title="사이드바 접기">‹</button></div>
     <nav class="nav-main" aria-label="화면 선택"><button type="button" class="nav-item active" data-page="home" title="홈"><span class="nav-icon" aria-hidden="true">⌂</span><span class="nav-label">홈</span></button><button type="button" class="nav-item" data-page="catalog"><span class="nav-icon">▦</span><span class="nav-label">도감</span><span id="nav-count" class="nav-counter"></span></button><button type="button" class="nav-item" data-page="compare"><span class="nav-icon">⊞</span><span class="nav-label">비교</span><span id="compare-badge" class="nav-counter">0/4</span></button></nav>
     <nav class="categories" id="categories" aria-label="함수 계열 선택"></nav>
     <div class="sidebar-bottom"><a href="https://github.com/oyueo-mm/ActivationLab" target="_blank" rel="noopener noreferrer" aria-label="GitHub 저장소" title="GitHub 저장소"><span aria-hidden="true">↗</span></a></div>
   </aside>
   <div class="scrim" id="scrim"></div>
   <div class="workspace">
-    <header class="topbar"><button type="button" id="mobile-menu" class="icon-button menu-toggle" aria-label="메뉴 열기">☰</button><span class="mobile-top-title">ActivationLab</span><div class="header-actions"><button type="button" id="reset-view" class="text-button reset-icon" title="검색·필터 초기화" aria-label="검색·필터 초기화">↺</button><a href="https://github.com/oyueo-mm/ActivationLab" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub 저장소" title="GitHub 저장소">↗</a></div></header>
+    <header class="topbar"></header>
     <main class="main" id="main">
       <section id="home-view" class="view home-view"><div class="home-layout"><div class="home-intro"><h1>활성화 함수<br><span>도감</span><span class="home-title-dot">.</span></h1><p>함수의 형태를 보고 직접 비교해 보세요.</p><div class="home-actions"><button type="button" class="home-primary" data-page="catalog">도감 살펴보기 <span aria-hidden="true">→</span></button><button type="button" class="home-secondary" data-page="compare">함수 비교 <span aria-hidden="true">↗</span></button></div><span class="home-count"><span id="home-total">132</span>개의 활성화 함수</span></div><div class="home-visual" id="home-visual" aria-label="네 가지 활성화 함수의 움직이는 그래프"><div class="home-cards" id="home-cards"></div></div></div></section>
       <section id="catalog-view" class="view" hidden>

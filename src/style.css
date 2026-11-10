@@ -32,3 +32,43 @@
 
 /* ActivationLab 1.3 · vector, spline and spatial demo layouts */
 .spatial-panel,.basis-panel{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}.spatial-heatmap,.basis-svg{display:block;width:100%;height:auto}.spatial-heatmap>text{fill:#56677c;font-size:14px;font-weight:650}.spatial-explain{font-size:11px;line-height:1.7;color:#8291a4;margin:8px 2px 3px}.basis-heading{font-size:12px;color:#475a71;font-weight:700;margin:4px 0 8px}.basis-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:#8493a5}.basis-legend span{display:inline-flex;align-items:center;gap:5px}.basis-legend i{height:4px;width:15px;display:inline-block;border-radius:4px}.context-branches{margin:9px 3px 0;color:#65778e;font-size:11px}.vector-parameter-group{border-top:1px solid var(--line);margin:19px 9px 3px;padding-top:18px}.vector-parameter-group .parameter-row{display:block;margin:12px 0}.vector-parameter-group .parameter-row input{display:block;width:100%;margin:9px 0;accent-color:var(--blue)}.vector-parameter-group button{margin-top:12px}.vector-order{margin:10px 9px 0;display:grid;justify-items:center;gap:6px}.vector-values{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:6px}.vector-pill{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;border:1px solid #dfe7f3;border-radius:7px;padding:8px 3px;color:#4776b9;background:#f4f8fe;font:11px ui-monospace,Consolas,monospace}.vector-pill.negative{color:#8e62ba;background:#faf5ff;border-color:#e9dcf7}.vector-arrow{color:#9eacba;font-size:17px}@media(max-width:430px){.vector-pill{font-size:9px;padding:7px 2px}.spatial-panel,.basis-panel{padding:8px}}
+
+
+/* Compact brand-first navigation. White canvas and existing graph colors are unchanged. */
+.brand-area{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;margin:0 5px 36px}
+.brand-home{display:flex;align-items:center;min-width:0;white-space:nowrap}
+.brand-label{font-size:16px;letter-spacing:-.5px;font-weight:750}
+.sidebar-collapse-button{position:static;top:auto;right:auto;width:28px;height:28px;flex:0 0 28px;font-size:16px}
+.brand-reopen{display:none;place-items:center;padding:7px;width:42px;height:42px;flex:0 0 42px;border:0;border-radius:10px;background:transparent;cursor:pointer}
+.brand-reopen:hover{background:var(--soft)}
+.brand-reopen .brand-mark,.brand-reopen .brand-mark img{width:28px;height:28px}
+.nav-item,.category-item{font-size:12px;gap:9px;padding:10px 12px}
+.nav-icon{font-size:16px;width:18px}
+.category-item{font-size:11px;padding:9px 12px}
+.topbar{justify-content:initial}
+@media(min-width:761px){
+  html.sidebar-collapsed .brand-area{justify-content:center;margin:0 0 42px}
+  html.sidebar-collapsed .brand-home,html.sidebar-collapsed .sidebar-collapse-button{display:none}
+  html.sidebar-collapsed .brand-reopen{display:grid}
+  html.sidebar-collapsed .brand-reopen .brand-mark,html.sidebar-collapsed .brand-reopen .brand-mark img{width:28px;height:28px}
+  html.sidebar-collapsed .nav-item,html.sidebar-collapsed .category-item{padding:10px 0;justify-content:center}
+}
+@media(max-width:760px){
+  :root{--sidebar:56px}
+  .sidebar{width:56px;padding:19px 6px 12px;transform:none;transition:width .2s ease,padding .2s ease;box-shadow:none}
+  .sidebar.open{width:244px;padding:19px 13px 12px;transform:none;box-shadow:var(--shadow)}
+  .workspace{margin-left:56px;width:calc(100% - 56px)}
+  .topbar{height:51px;padding:0}
+  .sidebar .brand-area{margin:0 0 29px}
+  .sidebar:not(.open) .brand-area{justify-content:center}
+  .sidebar:not(.open) .brand-home,.sidebar:not(.open) .sidebar-collapse-button{display:none}
+  .sidebar:not(.open) .brand-reopen{display:grid}
+  .sidebar.open .brand-reopen{display:none}
+  .sidebar.open .sidebar-collapse-button{display:grid}
+  .sidebar:not(.open) .nav-label,.sidebar:not(.open) .category-label,.sidebar:not(.open) .nav-counter,.sidebar:not(.open) .category-counter{display:none}
+  .sidebar:not(.open) .nav-item,.sidebar:not(.open) .category-item{padding:10px 0;gap:0;justify-content:center}
+  .sidebar:not(.open) .nav-main{margin-bottom:19px}
+  .sidebar:not(.open) .sidebar-bottom{padding:16px 0 0}
+  .sidebar:not(.open) .sidebar-bottom a{justify-content:center;padding:6px 0}
+  .sidebar.open .brand-area{justify-content:space-between;margin:0 3px 29px}
+}
