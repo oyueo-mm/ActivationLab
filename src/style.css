@@ -73,6 +73,8 @@
   .sidebar.open .brand-area{justify-content:space-between;margin:0 3px 29px}
 }
 
-/* Two-line home identity: preserve the white canvas and hero chart layout. */
-.home-intro h1{font-size:clamp(32px,3.7vw,65px);letter-spacing:-.065em;line-height:1.18}.home-intro h1>span:first-of-type{font-size:.88em;white-space:nowrap}.home-intro .home-actions{margin-top:30px}
-@media(max-width:760px){.home-intro h1{font-size:clamp(29px,8vw,52px)}}
+/* Home title: enlarge ActivationLab only; keep the second-line font size and white canvas. */
+.home-intro h1{font-size:clamp(48px,4.6vw,76px);letter-spacing:-.065em;line-height:1.18}.home-intro h1>span:first-of-type{font-size:clamp(39.6px,4.312vw,57.2px);white-space:nowrap}.home-intro .home-actions{margin-top:30px}
+@media(max-width:1230px){.home-intro h1{font-size:clamp(46px,5vw,68px)}.home-intro h1>span:first-of-type{font-size:clamp(36.96px,3.96vw,56.32px)}}
+@media(max-width:1000px){.home-intro h1{font-size:58px}.home-intro h1>span:first-of-type{font-size:45.76px}}
+@media(max-width:760px){.home-intro h1{font-size:clamp(30px,9.2vw,58px)}.home-intro h1>span:first-of-type{font-size:clamp(25.52px,7.04vw,45.76px)}}
